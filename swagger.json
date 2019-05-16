@@ -263,9 +263,17 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "type" : "array",
-                  "items" : {
-                    "$ref" : "#/components/schemas/AqiDetailsOnDateTime"
+                  "type" : "object",
+                  "properties" : {
+                    "station" : {
+                      "$ref" : "#/components/schemas/Station"
+                    },
+                    "data" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/AqiDetailsOnDateTime"
+                      }
+                    }
                   }
                 }
               }
@@ -404,9 +412,6 @@
             "type" : "string",
             "format" : "date-time",
             "example" : "2019-05-02T17:32:28Z"
-          },
-          "station" : {
-            "$ref" : "#/components/schemas/Station"
           },
           "aqi" : {
             "$ref" : "#/components/schemas/AqiOnDateTime"
