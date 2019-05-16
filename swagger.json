@@ -1,0 +1,539 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/house-elf/monair/1.0.0"
+  }, {
+    "description" : "MonAir API",
+    "url" : "https://api.smartmonair.com.com/v1"
+  } ],
+  "info" : {
+    "description" : "MonAir API",
+    "version" : "1.0.0",
+    "title" : "MonAir API inventary",
+    "contact" : {
+      "email" : "buzyka@trafficdna.com"
+    }
+  },
+  "paths" : {
+    "/countries" : {
+      "get" : {
+        "summary" : "Return an array of all supported countries",
+        "description" : "countries with no active stations will not be returned\n",
+        "operationId" : "countries",
+        "responses" : {
+          "200" : {
+            "description" : "Each country object contains its English name country (requested by other endpoints)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CountryName"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorisation failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthorisationException"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/states" : {
+      "get" : {
+        "summary" : "List supported states ",
+        "description" : "Return an array of all supported states, inside a specified country.\n* states with no active stations will not be returned.'\n",
+        "operationId" : "states",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "country",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "Country`s English name, can be found using the respective listing endpoint."
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Each state object contains its English name state (requested by other endpoints)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/StateName"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Incorrect request params",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RequestException"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorisation failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthorisationException"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/cities" : {
+      "get" : {
+        "summary" : "List supported cities in a state or in whole country",
+        "description" : "Return an array of all supported cities*, inside a specified state.\n* cities with no active stations will not be returned.\n",
+        "operationId" : "cities",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "country",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "Country`s English name, can be found using the respective listing endpoint."
+        }, {
+          "in" : "query",
+          "name" : "state",
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "State`s English name, can be found using the respective listing endpoint. (Optional parameter if it not included to request then all cities of the country will be returned)"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Each city object contains its English name city (requested by other endpoints)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/CityName"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Incorrect request params",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RequestException"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorisation failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthorisationException"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/stations" : {
+      "get" : {
+        "summary" : "List supported stations in a city",
+        "description" : "Return an array of all supported active stations, inside a specified city.\n",
+        "operationId" : "stations",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "country",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "Country`s English name, can be found using the respective listing endpoint."
+        }, {
+          "in" : "query",
+          "name" : "state",
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "State`s English name, can be found using the respective listing endpoint.(Optional)"
+        }, {
+          "in" : "query",
+          "name" : "city",
+          "schema" : {
+            "type" : "string"
+          },
+          "description" : "city`s English name, can be found using the respective listing endpoint."
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Each station object contains its English name station (requested by other endpoints)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Station"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Incorrect request params",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RequestException"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorisation failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthorisationException"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    },
+    "/station_data" : {
+      "get" : {
+        "summary" : "List supported stations in a city",
+        "description" : "Return an array of all supported active stations, inside a specified city.\n",
+        "operationId" : "station",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "station-id",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "Station`s id, can be found using the respective listing endpoint."
+        }, {
+          "in" : "query",
+          "name" : "date",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "example" : "2019-05-02"
+          },
+          "description" : "Measurement date.(Optional current date by default)"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Each station object contains its English name station (requested by other endpoints)",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AqiDetailsOnDateTime"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Incorrect request params",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RequestException"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorisation failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthorisationException"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "CountryName" : {
+        "type" : "object",
+        "required" : [ "country" ],
+        "properties" : {
+          "country" : {
+            "type" : "string",
+            "example" : "USA"
+          }
+        }
+      },
+      "StateName" : {
+        "type" : "object",
+        "required" : [ "state" ],
+        "properties" : {
+          "state" : {
+            "type" : "string",
+            "example" : "Alabama"
+          }
+        }
+      },
+      "CityName" : {
+        "type" : "object",
+        "required" : [ "city" ],
+        "properties" : {
+          "state" : {
+            "type" : "string",
+            "example" : "New York"
+          }
+        }
+      },
+      "Station" : {
+        "type" : "object",
+        "required" : [ "location", "station" ],
+        "properties" : {
+          "location" : {
+            "$ref" : "#/components/schemas/StationLocation"
+          },
+          "station-name" : {
+            "type" : "string",
+            "example" : "US Embassy"
+          },
+          "station-id" : {
+            "type" : "string",
+            "example" : "s123456"
+          }
+        }
+      },
+      "StationLocation" : {
+        "type" : "object",
+        "required" : [ "type", "coordinates" ],
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "enum" : [ "Point", "Polygon" ],
+            "example" : "Point"
+          },
+          "coordinates" : {
+            "$ref" : "#/components/schemas/Coordinates"
+          }
+        }
+      },
+      "Coordinates" : {
+        "type" : "array",
+        "items" : {
+          "type" : "number"
+        },
+        "minItems" : 2,
+        "maxItems" : 2,
+        "example" : [ 116.466258, 39.954352 ]
+      },
+      "AuthorisationException" : {
+        "description" : "Incorrect API Key",
+        "properties" : {
+          "name" : {
+            "description" : "Exception name",
+            "type" : "string"
+          },
+          "message" : {
+            "description" : "Exception message",
+            "type" : "string"
+          },
+          "code" : {
+            "description" : "Exception code",
+            "type" : "integer"
+          },
+          "status" : {
+            "description" : "Exception status",
+            "type" : "integer"
+          },
+          "type" : {
+            "description" : "Exception type",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "AqiDetailsOnDateTime" : {
+        "description" : "AQI calculated on a specific date and time. Include detalization by pollution and weather.",
+        "properties" : {
+          "date-time" : {
+            "description" : "Sample date and time",
+            "type" : "string",
+            "format" : "date-time",
+            "example" : "2019-05-02T17:32:28Z"
+          },
+          "station" : {
+            "$ref" : "#/components/schemas/Station"
+          },
+          "aqi" : {
+            "$ref" : "#/components/schemas/AqiOnDateTime"
+          },
+          "pollution" : {
+            "$ref" : "#/components/schemas/PollutionSample"
+          }
+        },
+        "type" : "object"
+      },
+      "AqiOnDateTime" : {
+        "description" : "AQI details",
+        "properties" : {
+          "value" : {
+            "description" : "Calculated value of AQI",
+            "type" : "integer",
+            "example" : 131
+          },
+          "status" : {
+            "type" : "string",
+            "enum" : [ "good", "moderate", "unhealthy for sensitive groups", "unhealthy" ],
+            "example" : "good"
+          },
+          "dominant_pollutant" : {
+            "description" : "Dominant pollution",
+            "type" : "string",
+            "enum" : [ "pm10", "pm25", "o3", "co", "no2", "so2", "nh3", "h2s" ],
+            "example" : "pm10"
+          }
+        },
+        "type" : "object"
+      },
+      "PollutionSample" : {
+        "description" : "Detailed Sample Data",
+        "properties" : {
+          "pm10" : {
+            "description" : "PM 10",
+            "type" : "number",
+            "format" : "float",
+            "nullable" : true,
+            "example" : "0,01"
+          },
+          "pm25" : {
+            "description" : "PM 2,5",
+            "type" : "number",
+            "format" : "float",
+            "nullable" : true,
+            "example" : "0,01"
+          },
+          "o3" : {
+            "description" : "O3",
+            "type" : "number",
+            "format" : "float",
+            "nullable" : true,
+            "example" : "0,01"
+          },
+          "co" : {
+            "description" : "CO",
+            "type" : "number",
+            "format" : "float",
+            "nullable" : true,
+            "example" : "0,01"
+          },
+          "no2" : {
+            "description" : "NO2",
+            "type" : "number",
+            "format" : "float",
+            "nullable" : true,
+            "example" : "0,01"
+          },
+          "so2" : {
+            "description" : "SO2",
+            "type" : "number",
+            "format" : "float",
+            "nullable" : true,
+            "example" : "0,01"
+          },
+          "nh3" : {
+            "description" : "NH3",
+            "type" : "number",
+            "format" : "float",
+            "nullable" : true,
+            "example" : "0,01"
+          },
+          "h2s" : {
+            "description" : "H2S",
+            "type" : "number",
+            "format" : "float",
+            "nullable" : true,
+            "example" : "0,01"
+          }
+        },
+        "type" : "object"
+      },
+      "RequestException" : {
+        "description" : "Incorrect Request parameters",
+        "properties" : {
+          "name" : {
+            "description" : "Exception name",
+            "type" : "string"
+          },
+          "message" : {
+            "description" : "Exception message",
+            "type" : "string"
+          },
+          "code" : {
+            "description" : "Exception code",
+            "type" : "integer"
+          },
+          "status" : {
+            "description" : "Exception status",
+            "type" : "integer"
+          },
+          "type" : {
+            "description" : "Exception type",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : {
+      "api_key" : {
+        "type" : "apiKey",
+        "name" : "X-MonAir-access-token",
+        "in" : "header"
+      }
+    }
+  }
+}
