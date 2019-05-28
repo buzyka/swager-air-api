@@ -304,6 +304,97 @@
           "api_key" : [ ]
         } ]
       }
+    },
+    "/bbox_data" : {
+      "get" : {
+        "summary" : "Get data for specified bounding box",
+        "description" : "Return an array of all supported active stations, inside a specified city.\n",
+        "operationId" : "bbox_data",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "ne-lng",
+          "schema" : {
+            "type" : "number"
+          },
+          "required" : true,
+          "description" : "Bbox northeast point longitude",
+          "example" : 35.829170446428904
+        }, {
+          "in" : "query",
+          "name" : "ne-lat",
+          "schema" : {
+            "type" : "number"
+          },
+          "required" : true,
+          "description" : "Bbox northeast point latitude",
+          "example" : 48.63383751704761
+        }, {
+          "in" : "query",
+          "name" : "sw-lng",
+          "schema" : {
+            "type" : "number"
+          },
+          "required" : true,
+          "description" : "Bbox southwest point longitude",
+          "example" : 34.38900971458965
+        }, {
+          "in" : "query",
+          "name" : "sw-lat",
+          "schema" : {
+            "type" : "number"
+          },
+          "required" : true,
+          "description" : "Bbox southwest point latitude",
+          "example" : 48.18790793942956
+        }, {
+          "in" : "query",
+          "name" : "date",
+          "schema" : {
+            "type" : "string",
+            "format" : "date",
+            "example" : "2019-05-02"
+          },
+          "description" : "Measurement date.(Optional current date by default)"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returned array with stations and this stations data that included in box.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/BBoxResponseItem"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Incorrect request params",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RequestException"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorisation failed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthorisationException"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ]
+      }
     }
   },
   "components" : {
@@ -418,6 +509,18 @@
           },
           "pollution" : {
             "$ref" : "#/components/schemas/PollutionSample"
+          }
+        },
+        "type" : "object"
+      },
+      "BBoxResponseItem" : {
+        "description" : "Reponse contain station",
+        "properties" : {
+          "station" : {
+            "$ref" : "#/components/schemas/Station"
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/AqiOnDateTime"
           }
         },
         "type" : "object"
