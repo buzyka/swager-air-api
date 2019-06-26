@@ -423,7 +423,7 @@
         "type" : "object",
         "required" : [ "city" ],
         "properties" : {
-          "state" : {
+          "city" : {
             "type" : "string",
             "example" : "New York"
           }
